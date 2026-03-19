@@ -1,0 +1,40 @@
+[package]
+name = "cladst"
+version = "0.1.0"
+edition = "2024"
+description = "DST encoder/decoder for DSD audio"
+license = "GPL-3.0-or-later"
+authors = ["KyokoMiki"]
+repository = "https://github.com/KyokoMiki/cladst"
+readme = "README.md"
+keywords = ["dst", "dsd", "audio", "codec"]
+categories = ["multimedia::audio", "encoding"]
+
+[lib]
+name = "cladst"
+
+[[bin]]
+name = "cladst"
+path = "src/main.rs"
+required-features = ["cli"]
+
+[features]
+default = ["cli"]
+cli = ["dep:anyhow", "dep:clap", "dep:same-file"]
+
+[dependencies]
+thiserror = "2"
+
+# CLI-only dependencies
+anyhow = { version = "1", optional = true }
+clap = { version = "4", features = ["derive"], optional = true }
+same-file = { version = "1", optional = true }
+rayon = "1.11.0"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
